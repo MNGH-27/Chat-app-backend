@@ -12,13 +12,16 @@ const api = require('./src/routes/api.routes')
 // creat app
 const app = express()
 
+
 // middle wares
 // logger(morgan) are using the host parameter
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false, limit: 10000 }))
 app.use(cookieParser())
 
+// Serve static files from the 'uploads' directory
+app.use(express.static('uploads'))
 
 // CORS HADNLING
 app.use(

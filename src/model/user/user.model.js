@@ -4,10 +4,9 @@ const jwt = require('jsonwebtoken')
 
 // use Database Schema
 const userSchema = require('./user.schema')
-const { resolve } = require('path')
-const { rejects } = require('assert')
 
-async function createNewUser (name, password, email) {
+
+async function createNewUser ({ userName, password, email, profile }) {
   // create password for user =>
   const { hash, salt } = setPassword(password)
 
@@ -15,9 +14,10 @@ async function createNewUser (name, password, email) {
   return await new Promise((resolve, reject) =>
     userSchema
       .create({
-        name,
+        userName,
         password,
         email,
+        profile,
         salt,
         hash
       })
@@ -25,7 +25,7 @@ async function createNewUser (name, password, email) {
         // create token for created user
         const token = generateJwt(
           response.id,
-          response.name,
+          response.userName,
           response.email,
           response.role
         )
@@ -33,7 +33,7 @@ async function createNewUser (name, password, email) {
         // return result as response
         resolve({
           id: response._id,
-          name: response.name,
+          userName: response.userName,
           email: response.email,
           token
         })
@@ -49,11 +49,11 @@ async function createNewUser (name, password, email) {
 async function loginUser ({ userName, password }) {
   return await new Promise((resolve, reject) =>
     userSchema
-      .findOne({ name: userName, password })
+      .findOne({ userName, password })
       .then(result => {
         if (result) {
           resolve({
-            name: result.name,
+            userName: result.userName,
             token: result.token,
             email: result.email
           })
@@ -67,7 +67,7 @@ async function loginUser ({ userName, password }) {
 }
 
 // generate JWT with data => {id , email , name , role}
-function generateJwt (id, email, name, role) {
+function generateJwt (id, email, userName, role) {
   const expiry = new Date()
   expiry.setDate(expiry.getDate() + 7)
 
@@ -75,7 +75,7 @@ function generateJwt (id, email, name, role) {
     {
       id: id,
       email: email,
-      name: name,
+      userName: userName,
       role: role,
       exp: parseInt(expiry.getTime() / 1000)
     },
