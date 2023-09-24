@@ -18,4 +18,11 @@ router.post(
   authController.signup
 )
 
+router.post('/forgetPassword', authController.forgetPassword)
+
+router.post('/checkOtp', authController.checkOPTCode)
+
+router.post('/resetPassword', authController.resetPassword)
+
+
 module.exports = router

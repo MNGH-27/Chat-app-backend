@@ -58,3 +58,7 @@ out/
 
 # Ignore any local development files or configurations that should not be versioned
 config.local.js
+
+
+#Ignore local Upload files
+uploads

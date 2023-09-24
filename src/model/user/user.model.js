@@ -66,6 +66,77 @@ async function loginUser ({ userName, password }) {
   )
 }
 
+
+async function findUserWithEmail ({ email }) {
+  return await new Promise((resolve, reject) =>
+    userSchema
+      .findOne({ email })
+      .then(result => {
+        if (result) {
+          resolve({
+            id: result._id,
+            userName: result.userName,
+            email: result.email
+          })
+        } else {
+          reject({
+            statusCode: 400,
+            message: 'there is no any user with this email'
+          })
+        }
+      }).catch((err) => {
+        reject({
+          statusCode: 500,
+          message: err
+        })
+      })
+  )
+}
+
+async function resetUserPassword ({ userId, newPassword }) {
+  return await new Promise((resolve, reject) => {
+    userSchema
+      .findOneAndUpdate(
+        { _id: userId },
+        { password: newPassword },
+        { new: true })
+      .then((response) => {
+        // check if there is user with this userId
+        if (response) {
+          // there is user send users this response
+          // create token for created user
+          const token = generateJwt(
+            response.id,
+            response.userName,
+            response.email,
+            response.role
+          )
+
+          // return result as response
+          resolve({
+            id: response._id,
+            userName: response.userName,
+            email: response.email,
+            token
+          })
+        } else {
+          // there wasn't any user with this data send error
+          reject({
+            statusCode: 400,
+            message: 'there is not user with this id'
+          })
+        }
+      })
+      .catch((err) => {
+        // error occure while get data from database
+        reject({
+          statusCode: 500,
+          message: err
+        })
+      })
+  })
+}
+
 // generate JWT with data => {id , email , name , role}
 function generateJwt (id, email, userName, role) {
   const expiry = new Date()
@@ -84,7 +155,6 @@ function generateJwt (id, email, userName, role) {
   )
 }
 
-
 // create password with hash and salt
 function setPassword (password) {
   const salt = crypto.randomBytes(16).toString('hex')
@@ -100,5 +170,5 @@ function setPassword (password) {
 
 
 module.exports = {
-  createNewUser, loginUser
+  createNewUser, loginUser, findUserWithEmail, resetUserPassword
 }

@@ -62,6 +62,7 @@ module.exports = {
     'no-var': 'error',
     'object-shorthand': 'off',
     'prefer-const': 'error',
-    'prefer-template': 'warn'
+    'prefer-template': 'warn',
+    'prefer-promise-reject-errors': 'off'
   }
 }
