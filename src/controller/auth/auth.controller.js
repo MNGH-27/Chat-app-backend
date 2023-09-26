@@ -39,16 +39,9 @@ async function Login (req, res) {
       ...loginData
     })
   } catch (error) {
-    // check if there is error
-    if (!error) {
-      // there is no any error message , we don't have user with this kind of data
-      return res.status(400).send({
-        message: 'there is no any user with this username and password'
-      })
-    }
-
-    return res.status(500).send({
-      error
+    // there was error while login user
+    return res.status(error.statusCode).send({
+      message: error.message
     })
   }
 }

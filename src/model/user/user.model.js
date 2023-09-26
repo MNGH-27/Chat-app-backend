@@ -32,15 +32,20 @@ async function createNewUser ({ userName, password, email, profile }) {
 
         // return result as response
         resolve({
-          id: response._id,
-          userName: response.userName,
-          email: response.email,
+          data: {
+            id: response._id,
+            userName: response.userName,
+            email: response.email
+          },
           token
         })
       })
       .catch((err) => {
         // catch error if there would be error
-        reject(err)
+        reject({
+          statusCode: 500,
+          message: err
+        })
       })
   )
 }
@@ -53,15 +58,24 @@ async function loginUser ({ userName, password }) {
       .then(result => {
         if (result) {
           resolve({
-            userName: result.userName,
             token: result.token,
-            email: result.email
+            data: {
+              id: result._id,
+              userName: result.userName,
+              email: result.email
+            }
           })
         } else {
-          reject(result)
+          reject({
+            statusCode: 400,
+            message: 'can\'t find user with this data'
+          })
         }
       }).catch((err) => {
-        reject(err)
+        reject({
+          statusCode: 500,
+          message: err
+        })
       })
   )
 }
@@ -114,9 +128,11 @@ async function resetUserPassword ({ userId, newPassword }) {
 
           // return result as response
           resolve({
-            id: response._id,
-            userName: response.userName,
-            email: response.email,
+            data: {
+              id: response._id,
+              userName: response.userName,
+              email: response.email
+            },
             token
           })
         } else {
