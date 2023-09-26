@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 // use Database Schema
 const userSchema = require('./user.schema')
 
+// helper
+const generateFileLink = require('./../../helper/generateFileLink.helper')
+
 
 async function createNewUser ({ userName, password, email, profile }) {
   // create password for user =>
@@ -24,7 +27,7 @@ async function createNewUser ({ userName, password, email, profile }) {
       .then((response) => {
         // create token for created user
         const token = generateJwt(
-          response.id,
+          response._id,
           response.userName,
           response.email,
           response.role
@@ -35,13 +38,22 @@ async function createNewUser ({ userName, password, email, profile }) {
           data: {
             id: response._id,
             userName: response.userName,
-            email: response.email
+            email: response.email,
+            profile: generateFileLink(response.profile)
           },
           token
         })
       })
       .catch((err) => {
-        // catch error if there would be error
+        // catch error code
+        if (err.code === 11000) {
+          reject({
+            statusCode: 400,
+            message: `field ${Object.keys(err.keyPattern)[0]} is duplicated`
+          })
+        }
+
+
         reject({
           statusCode: 500,
           message: err
@@ -57,12 +69,21 @@ async function loginUser ({ userName, password }) {
       .findOne({ userName, password })
       .then(result => {
         if (result) {
+          // create token for created user
+          const token = generateJwt(
+            result._id,
+            result.userName,
+            result.email,
+            result.role
+          )
+
           resolve({
-            token: result.token,
+            token,
             data: {
               id: result._id,
               userName: result.userName,
-              email: result.email
+              email: result.email,
+              profile: generateFileLink(result.profile)
             }
           })
         } else {
@@ -131,7 +152,8 @@ async function resetUserPassword ({ userId, newPassword }) {
             data: {
               id: response._id,
               userName: response.userName,
-              email: response.email
+              email: response.email,
+              profile: generateFileLink(response.profile)
             },
             token
           })

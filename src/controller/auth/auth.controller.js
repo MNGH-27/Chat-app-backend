@@ -34,6 +34,8 @@ async function Login (req, res) {
       ...value
     })
 
+    console.log('loginData : ', loginData)
+
     // user created successfuly => send users information for frontend
     return res.status(201).send({
       ...loginData
@@ -79,20 +81,15 @@ async function signup (req, res, next) {
 
     // user created successfuly => send users information for frontend
     return res.status(201).send({
-      ...newUser,
-      profile: `${req.protocol}://${req.get('host')}/${req.file.filename}`
+      ...newUser
     })
   } catch (error) {
-    // check if there is error
-    if (error.code === 11000) {
-      // there is no any error message , we don't have user with this kind of data
-      return res.status(400).send({
-        message: 'your data is duplicated'
-      })
-    }
+    // send error
 
-    return res.status(500).send({
-      error
+    console.log('error : ', error)
+
+    return res.status(error.statusCode).send({
+      message: error.message
     })
   }
 }
