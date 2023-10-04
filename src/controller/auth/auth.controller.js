@@ -8,7 +8,7 @@ const { forgetPasswordTemplate } = require('./../../template/forgetPassword.temp
 const { extractErrorMessage } = require('./../../helper/errorMessage')
 
 // MODEL
-const { loginUser, createNewUser, findUserWithEmail, resetUserPassword } = require('./../../model/user/user.model')
+const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
 const { createForgetPassword, findForgetPassword } = require('./../../model/forgetPassword/forgetPassword.model')
 
 async function Login (req, res) {
@@ -34,7 +34,6 @@ async function Login (req, res) {
       ...value
     })
 
-    console.log('loginData : ', loginData)
 
     // user created successfuly => send users information for frontend
     return res.status(201).send({
@@ -85,9 +84,6 @@ async function signup (req, res, next) {
     })
   } catch (error) {
     // send error
-
-    console.log('error : ', error)
-
     return res.status(error.statusCode).send({
       message: error.message
     })
@@ -113,7 +109,7 @@ async function forgetPassword (req, res) {
 
   try {
     // find user base on email user send
-    const findUser = await findUserWithEmail({ email: value.email })
+    const findUser = await findUserModel({ email: value.email })
 
     // create new OTP base on user we fetch from data base
     const newOTP = await createForgetPassword({ userId: findUser.id })

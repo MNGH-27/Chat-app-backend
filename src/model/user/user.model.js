@@ -102,16 +102,17 @@ async function loginUser ({ userName, password }) {
 }
 
 
-async function findUserWithEmail ({ email }) {
+async function findUserModel (searchField) {
   return await new Promise((resolve, reject) =>
     userSchema
-      .findOne({ email })
+      .findOne({ ...searchField })
       .then(result => {
         if (result) {
           resolve({
             id: result._id,
             userName: result.userName,
-            email: result.email
+            email: result.email,
+            profile: generateFileLink(result.profile)
           })
         } else {
           reject({
@@ -175,6 +176,7 @@ async function resetUserPassword ({ userId, newPassword }) {
   })
 }
 
+
 // generate JWT with data => {id , email , name , role}
 function generateJwt (id, email, userName, role) {
   const expiry = new Date()
@@ -208,5 +210,5 @@ function setPassword (password) {
 
 
 module.exports = {
-  createNewUser, loginUser, findUserWithEmail, resetUserPassword
+  createNewUser, loginUser, findUserModel, resetUserPassword
 }
