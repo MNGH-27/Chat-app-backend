@@ -11,7 +11,7 @@ const router = express.Router()
 /**
  * * this method will get userName as it query
  */
-router.get('/finduser:userName', userController.findUser)
+router.get('/finduser', userController.findUser)
 
 
 module.exports = router
