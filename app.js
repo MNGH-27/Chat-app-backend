@@ -5,6 +5,7 @@ const cors = require('cors')
 const logger = require('morgan')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
+const mongoSanitize = require('express-mongo-sanitize')
 
 // REQUIRE CUSTOM MIDDLEWARES
 const api = require('./src/routes/api.routes')
@@ -19,6 +20,9 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false, limit: 10000 }))
 app.use(cookieParser())
+
+// SANITIZE user requests
+app.use(mongoSanitize())
 
 // Serve static files from the 'uploads' directory
 app.use(express.static('uploads'))
