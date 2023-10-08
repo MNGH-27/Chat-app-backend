@@ -4,14 +4,20 @@ function authenticateToken (req, res, next) {
   // Get the token from the request headers or cookies or wherever you store it
   const BearerToken = req.headers.authorization
 
-  const token = BearerToken.split('Bearer ')[1]
-
   // check if route is UnAuthenticate Route
   if (unAuthenticatUrl.includes(req.url)) {
     return next()
   }
 
-  // Check if the token exists
+  // check if there is token in token field
+  if (!BearerToken) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+
+  const token = BearerToken.split('Bearer ')[1]
+
+
+  // Check if the token exists in bearer token
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
