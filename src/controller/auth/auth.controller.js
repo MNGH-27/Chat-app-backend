@@ -25,7 +25,7 @@ async function Login (req, res) {
     // return sepreted error to user
     return res
       .status(400)
-      .send({ message: extractErrorMessage(error) })
+      .send({ errors: extractErrorMessage(error) })
   }
 
   try {
@@ -48,7 +48,7 @@ async function Login (req, res) {
 }
 
 
-async function signup (req, res, next) {
+async function signup (req, res) {
   // check if there is file
   if (!req.file) {
     return res.status(400).send({ message: 'No file uploaded' })
@@ -68,7 +68,7 @@ async function signup (req, res, next) {
     // return sepreted error to user
     return res
       .status(400)
-      .send({ message: extractErrorMessage(error) })
+      .send({ errors: extractErrorMessage(error.details) })
   }
 
   try {
@@ -104,7 +104,7 @@ async function forgetPassword (req, res) {
     // return sepreted error to user
     return res
       .status(400)
-      .send({ message: extractErrorMessage(error) })
+      .send({ errors: extractErrorMessage(error) })
   }
 
   try {
@@ -170,7 +170,7 @@ async function checkOPTCode (req, res) {
     // return sepreted error to user
     return res
       .status(400)
-      .send({ message: extractErrorMessage(error) })
+      .send({ errors: extractErrorMessage(error) })
   }
 
   try {
@@ -211,7 +211,7 @@ async function resetPassword (req, res) {
     // return sepreted error to user
     return res
       .status(400)
-      .send({ message: extractErrorMessage(error) })
+      .send({ errors: extractErrorMessage(error) })
   }
 
   try {
