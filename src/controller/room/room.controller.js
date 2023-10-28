@@ -1,5 +1,6 @@
 // MODEL
-const { findRoom, createRoom } = require('./../../model/room/room.model')
+const { getUserById } = require('../../model/user/user.model')
+const { findRoom, createRoom, getRoomById } = require('./../../model/room/room.model')
 
 async function connectRoom (req, res) {
   try {
@@ -21,7 +22,37 @@ async function connectRoom (req, res) {
   }
 }
 
+async function getRoomDetail (req, res) {
+  // Get the 'roomId' query parameter from the URL
+  const roomId = req.query.roomId
+
+  // check if there is roomId in this queryParams
+  if (!roomId) {
+    return res.status(400).send({
+      message: 'you have to send room id to check'
+    })
+  }
+
+  try {
+    const room = await getRoomById({ roomId })
+
+    const receiver = await getUserById({ userId: room.receiverId })
+
+    res.status(200).send({
+      data: {
+        room,
+        receiver,
+        sender: req.user
+      }
+    })
+  } catch (error) {
+    // there is error while create new otp , send error to user
+    return res.status(error.statusCode).send({
+      message: error.message
+    })
+  }
+}
 
 module.exports = {
-  connectRoom
+  connectRoom, getRoomDetail
 }

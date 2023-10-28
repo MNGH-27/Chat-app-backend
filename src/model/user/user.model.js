@@ -129,6 +129,33 @@ async function findUserModel (searchField) {
   )
 }
 
+async function getUserById ({ userId }) {
+  return await new Promise((resolve, reject) =>
+    userSchema
+      .findOne({ _id: userId })
+      .then(result => {
+        if (result) {
+          resolve({
+            id: result._id,
+            userName: result.userName,
+            email: result.email,
+            profile: generateFileLink(result.profile)
+          })
+        } else {
+          reject({
+            statusCode: 400,
+            message: 'there is no any user with this id'
+          })
+        }
+      }).catch((err) => {
+        reject({
+          statusCode: 500,
+          message: err
+        })
+      })
+  )
+}
+
 async function resetUserPassword ({ userId, newPassword }) {
   return await new Promise((resolve, reject) => {
     userSchema
@@ -210,5 +237,5 @@ function setPassword (password) {
 
 
 module.exports = {
-  createNewUser, loginUser, findUserModel, resetUserPassword
+  createNewUser, loginUser, findUserModel, resetUserPassword, getUserById
 }

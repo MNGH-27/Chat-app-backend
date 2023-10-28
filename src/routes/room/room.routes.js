@@ -11,5 +11,5 @@ const Validator = require('./../../middleware/request-validator')
 const router = express.Router()
 
 router.post('/connectRoom', Validator('connectRoomSchema'), roomController.connectRoom)
-
+router.get('/room_detail', roomController.getRoomDetail)
 module.exports = router

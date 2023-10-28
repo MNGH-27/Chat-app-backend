@@ -59,7 +59,39 @@ async function createRoom ({ senderId, receiverId }) {
   })
 }
 
+async function getRoomById ({ roomId }) {
+  return await new Promise((resolve, reject) => {
+    roomSchema
+      .findOne({
+        _id: roomId
+      })
+      .then((response) => {
+        if (response) {
+          // return result as response
+          resolve({
+            senderId: response.senderId,
+            receiverId: response.receiverId,
+            id: response._id,
+            createAt: response.createAt
+          })
+        }
+
+        reject({
+          status: 400,
+          message: 'there is no room with this id'
+        })
+      })
+      .catch((err) => {
+        // catch error if there would be error
+        reject({
+          status: 500,
+          message: err
+        })
+      })
+  })
+}
+
 
 module.exports = {
-  findRoom, createRoom
+  findRoom, createRoom, getRoomById
 }
