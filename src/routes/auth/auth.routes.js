@@ -15,7 +15,10 @@ router.post('/login', Validator('loginSchema'), authController.Login)
 
 router.post(
   '/signup',
-  uploadProfileMiddleWare.single('profile'),
+  [
+    uploadProfileMiddleWare.single('profile'),
+    Validator('signupSchema')
+  ],
   authController.signup
 )
 

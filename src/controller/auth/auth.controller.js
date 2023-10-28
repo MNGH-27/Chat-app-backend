@@ -33,32 +33,10 @@ async function Login (req, res) {
 
 
 async function signup (req, res) {
-  // check if there is file
-  if (!req.file) {
-    return res.status(400).send({ message: 'No file uploaded' })
-  }
-
-  const userSchema = Joi.object({
-    email: Joi.string().email().required(),
-    userName: Joi.string().required(),
-    password: Joi.string().required().min(6)
-  })
-
-  const { error, value } = userSchema.validate(req.body, {
-    abortEarly: false
-  })
-
-  if (error) {
-    // return sepreted error to user
-    return res
-      .status(400)
-      .send({ errors: extractErrorMessage(error.details) })
-  }
-
   try {
     // generate new user
     const newUser = await createNewUser({
-      ...value,
+      ...req.body,
       profile: req.file.filename
     })
 

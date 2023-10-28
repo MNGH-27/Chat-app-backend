@@ -1,6 +1,4 @@
 function extractErrorMessage (details) {
-  console.log('details : ', details)
-
   const errorMessage = {}
 
   details.forEach((singleError) => {
