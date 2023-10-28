@@ -53,25 +53,9 @@ async function signup (req, res) {
 }
 
 async function forgetPassword (req, res) {
-  const passwordSchema = Joi.object({
-    email: Joi.string().email().required()
-  })
-
-  const { error, value } = passwordSchema.validate(req.body, {
-    abortEarly: false
-  })
-
-
-  if (error) {
-    // return sepreted error to user
-    return res
-      .status(400)
-      .send({ errors: extractErrorMessage(error) })
-  }
-
   try {
     // find user base on email user send
-    const findUser = await findUserModel({ email: value.email })
+    const findUser = await findUserModel({ email: req.body.email })
 
     // create new OTP base on user we fetch from data base
     const newOTP = await createForgetPassword({ userId: findUser.id })
@@ -88,7 +72,7 @@ async function forgetPassword (req, res) {
     // create option object to send email to user
     const mailOptions = {
       from: 'mnq13800831@gmail.com',
-      to: 'mohsenouri27@gmail.com',
+      to: req.body.email,
       subject: 'Forget Password',
       html: forgetPasswordTemplate(newOTP.otpCode) // html body
     }
@@ -104,7 +88,10 @@ async function forgetPassword (req, res) {
       } else {
         // there is not any error send response to user
         return res.status(201).send({
-          userId: findUser.id,
+          data: {
+            userId: findUser.id,
+            email: req.body.email
+          },
           message: 'otp send to your email successfully'
         })
       }
@@ -118,25 +105,8 @@ async function forgetPassword (req, res) {
 }
 
 async function checkOPTCode (req, res) {
-  const passwordSchema = Joi.object({
-    otp: Joi.string().length(6).required(),
-    userId: Joi.string().required()
-  })
-
-  const { error, value } = passwordSchema.validate(req.body, {
-    abortEarly: false
-  })
-
-
-  if (error) {
-    // return sepreted error to user
-    return res
-      .status(400)
-      .send({ errors: extractErrorMessage(error) })
-  }
-
   try {
-    const otpCode = await findForgetPassword({ otpCode: value.otp, userId: value.userId })
+    const otpCode = await findForgetPassword({ otpCode: req.body.otp, userId: req.body.userId })
 
     // send finded otpCode for user as response code 201
     return res.status(201).send({

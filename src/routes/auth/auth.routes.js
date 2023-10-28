@@ -22,9 +22,9 @@ router.post(
   authController.signup
 )
 
-router.post('/forgetPassword', authController.forgetPassword)
+router.post('/forgetPassword', Validator('forgetPasswordSchema'), authController.forgetPassword)
 
-router.post('/checkOtp', authController.checkOPTCode)
+router.post('/checkOtp', Validator('checkOtpSchema'), authController.checkOPTCode)
 
 router.post('/resetPassword', authController.resetPassword)
 

@@ -37,7 +37,7 @@ function tokenAuthentication (req, res, next) {
 }
 
 const unAuthenticatUrl = [
-  '/v1/auth/login', '/v1/auth/signup'
+  '/v1/auth/login', '/v1/auth/signup', '/v1/auth/forgetPassword', '/v1/auth/checkOtp', '/v1/auth/resetPassword'
 ]
 
 module.exports = tokenAuthentication
