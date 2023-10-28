@@ -26,7 +26,7 @@ router.post('/forgetPassword', Validator('forgetPasswordSchema'), authController
 
 router.post('/checkOtp', Validator('checkOtpSchema'), authController.checkOPTCode)
 
-router.post('/resetPassword', authController.resetPassword)
+router.post('/resetPassword', Validator('resetPasswordSchema'), authController.resetPassword)
 
 
 module.exports = router

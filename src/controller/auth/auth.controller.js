@@ -1,11 +1,7 @@
-const Joi = require('joi')
 const nodemailer = require('nodemailer')
 
 // TEMPLATE
 const { forgetPasswordTemplate } = require('../../core/template/forgetPassword.template')
-
-// HELPER
-const { extractErrorMessage } = require('../../core/helper/error-message')
 
 // MODEL
 const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
@@ -123,31 +119,8 @@ async function checkOPTCode (req, res) {
 
 
 async function resetPassword (req, res) {
-  const passwordSchema = Joi.object({
-    userId: Joi.string().required(),
-    password: Joi.string().min(6).required(),
-    repeatPassword: Joi.string()
-      .valid(Joi.ref('password'))
-      .required()
-      .messages({
-        'any.only': 'repeatPassword must be the same as password'
-      })
-  })
-
-  const { error, value } = passwordSchema.validate(req.body, {
-    abortEarly: false
-  })
-
-
-  if (error) {
-    // return sepreted error to user
-    return res
-      .status(400)
-      .send({ errors: extractErrorMessage(error) })
-  }
-
   try {
-    const newUserPassword = await resetUserPassword({ newPassword: value.password, userId: value.userId })
+    const newUserPassword = await resetUserPassword({ newPassword: req.body.password, userId: req.body.userId })
 
     return res.status(201).send({
       message: 'your password changed successfully',
