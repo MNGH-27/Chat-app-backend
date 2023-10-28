@@ -24,7 +24,19 @@ async function findUser (req, res) {
   }
 }
 
+async function getCurrentUser (req, res) {
+  if (req.user) {
+    return res.status(200).send({
+      data: req.user
+    })
+  }
+
+  return res.status(400).send({
+    message: 'there is no user with this token'
+  })
+}
+
 
 module.exports = {
-  findUser
+  findUser, getCurrentUser
 }
