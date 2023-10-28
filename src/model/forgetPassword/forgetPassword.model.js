@@ -1,4 +1,4 @@
-const { generateOTP } = require('./../../helper/generateOTP.helper')
+const { generateOTP } = require('../../core/helper/generate-otp')
 
 // use Database Schema
 const forgetPasswordSchema = require('./forgetPassword.schema')

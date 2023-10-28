@@ -1,7 +1,7 @@
 const Joi = require('joi')
 
 // HELPER
-const { extractErrorMessage } = require('../../helper/errorMessage')
+const { extractErrorMessage } = require('../../core/helper/error-message')
 
 // MODEL
 const { findRoom, createRoom } = require('./../../model/room/room.model')

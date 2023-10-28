@@ -2,36 +2,20 @@ const Joi = require('joi')
 const nodemailer = require('nodemailer')
 
 // TEMPLATE
-const { forgetPasswordTemplate } = require('./../../template/forgetPassword.template')
+const { forgetPasswordTemplate } = require('../../core/template/forgetPassword.template')
 
 // HELPER
-const { extractErrorMessage } = require('./../../helper/errorMessage')
+const { extractErrorMessage } = require('../../core/helper/error-message')
 
 // MODEL
 const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
 const { createForgetPassword, findForgetPassword } = require('./../../model/forgetPassword/forgetPassword.model')
 
 async function Login (req, res) {
-  const userSchema = Joi.object({
-    userName: Joi.string().required(),
-    password: Joi.string().required().min(6)
-  })
-
-  const { error, value } = userSchema.validate(req.body, {
-    abortEarly: false
-  })
-
-  if (error) {
-    // return sepreted error to user
-    return res
-      .status(400)
-      .send({ errors: extractErrorMessage(error) })
-  }
-
   try {
     // generate instance of class of user
     const loginData = await loginUser({
-      ...value
+      ...req.body
     })
 
 

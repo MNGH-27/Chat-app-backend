@@ -4,13 +4,14 @@ const express = require('express')
 const authController = require('./../../controller/auth/auth.controller')
 
 // MIDDLEWARE - handle profile upload
-const { uploadProfileMiddleWare } = require('./../../middleware/upload.middleware')
+const { uploadProfileMiddleWare } = require('./../../middleware/upload-profile')
+const Validator = require('./../../middleware/request-validator')
 
 // ROUTER
 const router = express.Router()
 
 
-router.post('/login', authController.Login)
+router.post('/login', Validator('loginSchema'), authController.Login)
 
 router.post(
   '/signup',

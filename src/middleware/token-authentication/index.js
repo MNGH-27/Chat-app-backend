@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-function authenticateToken (req, res, next) {
+function tokenAuthentication (req, res, next) {
   // Get the token from the request headers or cookies or wherever you store it
   const BearerToken = req.headers.authorization
 
@@ -40,4 +40,4 @@ const unAuthenticatUrl = [
   '/v1/auth/login', '/v1/auth/signup'
 ]
 
-module.exports = authenticateToken
+module.exports = tokenAuthentication

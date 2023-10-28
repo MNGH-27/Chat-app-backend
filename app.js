@@ -9,7 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 
 // REQUIRE CUSTOM MIDDLEWARES
 const api = require('./src/routes/api.routes')
-const authenticateToken = require('./src/middleware/authenticateToken.middleware')
+const tokenAuthentication = require('./src/middleware/token-authentication')
 
 // creat app
 const app = express()
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 app.use(passport.initialize())
 
 // CUSTOM MIDDLE-WARE
-app.use(authenticateToken)
+app.use(tokenAuthentication)
 
 // ADD ROUTER =: API OF V1
 app.use('/v1', api)
