@@ -36,7 +36,7 @@ async function getRoomDetail (req, res) {
   try {
     const room = await getRoomById({ roomId })
 
-    const receiver = await getUserById({ userId: room.receiverId })
+    const receiver = await getUserById({ userId: room.receiverId !== req.user.id ? room.receiverId : req.user.id })
 
     res.status(200).send({
       data: {
@@ -54,5 +54,6 @@ async function getRoomDetail (req, res) {
 }
 
 module.exports = {
-  connectRoom, getRoomDetail
+  connectRoom,
+  getRoomDetail
 }

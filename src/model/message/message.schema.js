@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const messageSchema = new mongoose.Schema({
-  conext: {
+  context: {
     type: String,
     require: true
   },

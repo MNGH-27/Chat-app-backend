@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable comma-dangle */
 module.exports = {
   env: {
     commonjs: true,
@@ -23,7 +25,7 @@ module.exports = {
     'no-console': 'warn',
     //* Avoid Bugs
     'no-undef': 'error',
-    semi: 'error',
+    // semi: 'error',
     'semi-spacing': 'error',
     //* Best Practices
     eqeqeq: 'warn',
@@ -51,10 +53,7 @@ module.exports = {
     //
     'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
     'no-whitespace-before-property': 'error',
-    'object-property-newline': [
-      'error',
-      { allowAllPropertiesOnSameLine: true }
-    ],
+    'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
     //* ES6
     'arrow-spacing': 'error',
     'no-confusing-arrow': 'error',
@@ -63,6 +62,7 @@ module.exports = {
     'object-shorthand': 'off',
     'prefer-const': 'error',
     'prefer-template': 'warn',
+    // eslint-disable-next-line comma-dangle
     'prefer-promise-reject-errors': 'off'
   }
 }
