@@ -6,7 +6,6 @@ const { SocketKeys } = require('./../core/enums')
 
 // DB models
 const { createNewMessage } = require('./../model/message/message.model')
-const { getRoomById } = require('./../model/room/room.model')
 
 function serverHandler (server) {
   const io = new Server(server, {
@@ -18,16 +17,20 @@ function serverHandler (server) {
 
   // handle on connect to server
   io.on('connection', (socket) => {
-    // create room with id as props as "roomId"
-    socket.on(SocketKeys.JoinRoom, async (roomId) => {
+    let roomId
+
+    // create room with id as props as "_roomId"
+    socket.on(SocketKeys.JoinRoom, async (_roomId) => {
+      roomId = _roomId
       socket.join(roomId)
     })
 
     socket.on(SocketKeys.CreateMessage, async ({ context, senderId, receiverId, roomId }) => {
       try {
-        const newMessage = await createNewMessage({ context, receiverId, roomId, senderId })
+        await createNewMessage({ context, receiverId, roomId, senderId })
 
-        socket.emit(SocketKeys.CheckNewMessage)
+        // Emit to all clients in the room except the sender
+        io.to(roomId).emit(SocketKeys.CheckNewMessage)
       } catch (error) {
         console.log('error in create message : ', error)
       }
