@@ -19,7 +19,7 @@ socketHandler(server)
 
 
 // start mongoDB
-require('./src/database/mongoDB')
+require('./src/config/database/mongoDB')
 
 // function of starting backend project
 async function startServer () {

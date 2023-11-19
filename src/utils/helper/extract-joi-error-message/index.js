@@ -1,4 +1,4 @@
-function extractErrorMessage (details) {
+function extractJoiErrorMessage (details) {
   const errorMessage = {}
 
   details.forEach((singleError) => {
@@ -8,5 +8,5 @@ function extractErrorMessage (details) {
   return errorMessage
 }
 
-module.exports = extractErrorMessage
+module.exports = extractJoiErrorMessage
 

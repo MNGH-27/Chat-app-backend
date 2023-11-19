@@ -26,5 +26,5 @@ const uploadProfileMiddleWare = multer({
   }
 })
 
-module.exports = { uploadProfileMiddleWare }
+module.exports = uploadProfileMiddleWare
 

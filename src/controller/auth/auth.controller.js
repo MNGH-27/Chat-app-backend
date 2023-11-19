@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer')
 
 // TEMPLATE
-const { forgetPasswordTemplate } = require('../../core/template/forgetPassword.template')
+const { forgetPasswordTemplate } = require('./../../utils/template')
 
 // MODEL
 const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')

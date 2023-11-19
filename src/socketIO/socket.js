@@ -2,7 +2,7 @@
 const { Server } = require('socket.io')
 
 // ENUMS
-const { SocketKeys } = require('./../core/enums')
+const { SocketKeys } = require('./../utils/enums')
 
 // DB models
 const { createNewMessage } = require('./../model/message/message.model')

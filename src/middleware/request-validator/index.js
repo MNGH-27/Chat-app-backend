@@ -3,11 +3,11 @@
 const createHttpError = require('http-errors')
 
 //* Include all validators
-const Validators = require('./../../core/validators')
+const Validators = require('./../../utils/validators')
+const { extractJoiErrorMessage } = require('./../../utils/helper')
 
-const extractErrorMessage = require('./../../core/helper/error-message')
 
-module.exports = function (validator) {
+function requestValidatorMiddleWare (validator) {
   return async function (req, res, next) {
     try {
       const validated = await Validators[validator].validateAsync(req.body)
@@ -17,7 +17,7 @@ module.exports = function (validator) {
       //! If validation error occurs call next with HTTP 422. Otherwise HTTP 500
       if (err.isJoi) {
         return res.status(422).send({
-          errors: extractErrorMessage(err.details)
+          errors: extractJoiErrorMessage(err.details)
         })
       }
 
@@ -25,3 +25,6 @@ module.exports = function (validator) {
     }
   }
 }
+
+
+module.exports = requestValidatorMiddleWare

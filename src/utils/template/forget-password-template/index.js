@@ -81,6 +81,5 @@ const forgetPasswordTemplate = (otpCode) => `
 
 </html>
 `
-module.exports = {
-  forgetPasswordTemplate
-}
+module.exports = forgetPasswordTemplate
+

@@ -4,12 +4,12 @@ const express = require('express')
 const roomController = require('./../../controller/room/room.controller')
 
 // MIDDLEWARE
-const Validator = require('./../../middleware/request-validator')
+const { requestValidatorMiddleWare } = require('./../../middleware')
 
 
 // ROUTER
 const router = express.Router()
 
-router.post('/connectRoom', Validator('connectRoomSchema'), roomController.connectRoom)
+router.post('/connectRoom', requestValidatorMiddleWare('connectRoomSchema'), roomController.connectRoom)
 router.get('/room_detail', roomController.getRoomDetail)
 module.exports = router

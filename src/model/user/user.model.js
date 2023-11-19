@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const userSchema = require('./user.schema')
 
 // helper
-const generateFileLink = require('../../core/helper/generate-file-link')
+const { generateFileLink } = require('../../utils/helper')
 
 
 async function createNewUser ({ userName, password, email, profile }) {

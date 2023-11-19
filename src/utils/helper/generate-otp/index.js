@@ -11,4 +11,4 @@ function generateOTP () {
   return otp.slice(0, 6)
 }
 
-module.exports = { generateOTP }
+module.exports = generateOTP
