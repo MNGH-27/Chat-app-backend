@@ -7,13 +7,12 @@ const { forgetPasswordTemplate } = require('./../../utils/template')
 const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
 const { createForgetPassword, findForgetPassword } = require('./../../model/forgetPassword/forgetPassword.model')
 
-async function Login (req, res) {
+async function Login(req, res) {
   try {
     // generate instance of class of user
     const loginData = await loginUser({
       ...req.body
     })
-
 
     // user created successfuly => send users information for frontend
     return res.status(201).send({
@@ -22,13 +21,12 @@ async function Login (req, res) {
   } catch (error) {
     // there was error while login user
     return res.status(error.statusCode).send({
-      message: error.message
+      message: error.message.toString()
     })
   }
 }
 
-
-async function signup (req, res) {
+async function signup(req, res) {
   try {
     // generate new user
     const newUser = await createNewUser({
@@ -48,7 +46,7 @@ async function signup (req, res) {
   }
 }
 
-async function forgetPassword (req, res) {
+async function forgetPassword(req, res) {
   try {
     // find user base on email user send
     const findUser = await findUserModel({ email: req.body.email })
@@ -100,7 +98,7 @@ async function forgetPassword (req, res) {
   }
 }
 
-async function checkOPTCode (req, res) {
+async function checkOPTCode(req, res) {
   try {
     const otpCode = await findForgetPassword({ otpCode: req.body.otp, userId: req.body.userId })
 
@@ -117,8 +115,7 @@ async function checkOPTCode (req, res) {
   }
 }
 
-
-async function resetPassword (req, res) {
+async function resetPassword(req, res) {
   try {
     const newUserPassword = await resetUserPassword({ newPassword: req.body.password, userId: req.body.userId })
 
@@ -127,7 +124,7 @@ async function resetPassword (req, res) {
       data: newUserPassword
     })
   } catch (error) {
-  // there is error while create new otp , send error to user
+    // there is error while create new otp , send error to user
     return res.status(error.statusCode).send({
       message: error.message
     })
@@ -135,6 +132,9 @@ async function resetPassword (req, res) {
 }
 
 module.exports = {
-  Login, signup, forgetPassword, checkOPTCode, resetPassword
+  Login,
+  signup,
+  forgetPassword,
+  checkOPTCode,
+  resetPassword
 }
-

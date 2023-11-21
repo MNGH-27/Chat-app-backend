@@ -8,8 +8,7 @@ const userSchema = require('./user.schema')
 // helper
 const { generateFileLink } = require('../../utils/helper')
 
-
-async function createNewUser ({ userName, password, email, profile }) {
+async function createNewUser({ userName, password, email, profile }) {
   // create password for user =>
   const { hash, salt } = setPassword(password)
 
@@ -26,12 +25,7 @@ async function createNewUser ({ userName, password, email, profile }) {
       })
       .then((response) => {
         // create token for created user
-        const token = generateJwt(
-          response._id,
-          response.userName,
-          response.email,
-          response.role
-        )
+        const token = generateJwt(response._id, response.userName, response.email, response.role)
 
         // return result as response
         resolve({
@@ -53,7 +47,6 @@ async function createNewUser ({ userName, password, email, profile }) {
           })
         }
 
-
         reject({
           statusCode: 500,
           message: err
@@ -62,20 +55,14 @@ async function createNewUser ({ userName, password, email, profile }) {
   )
 }
 
-
-async function loginUser ({ userName, password }) {
+async function loginUser({ userName, password }) {
   return await new Promise((resolve, reject) =>
     userSchema
       .findOne({ userName, password })
-      .then(result => {
+      .then((result) => {
         if (result) {
           // create token for created user
-          const token = generateJwt(
-            result._id,
-            result.userName,
-            result.email,
-            result.role
-          )
+          const token = generateJwt(result._id, result.userName, result.email, result.role)
 
           resolve({
             token,
@@ -89,10 +76,12 @@ async function loginUser ({ userName, password }) {
         } else {
           reject({
             statusCode: 400,
-            message: 'can\'t find user with this data'
+            // eslint-disable-next-line quotes
+            message: "can't find user with this data"
           })
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         reject({
           statusCode: 500,
           message: err
@@ -101,12 +90,11 @@ async function loginUser ({ userName, password }) {
   )
 }
 
-
-async function findUserModel (searchField) {
+async function findUserModel(searchField) {
   return await new Promise((resolve, reject) =>
     userSchema
       .findOne({ ...searchField })
-      .then(result => {
+      .then((result) => {
         if (result) {
           resolve({
             id: result._id,
@@ -120,7 +108,8 @@ async function findUserModel (searchField) {
             message: 'there is no any user with this email'
           })
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         reject({
           statusCode: 500,
           message: err
@@ -129,11 +118,11 @@ async function findUserModel (searchField) {
   )
 }
 
-async function getUserById ({ userId }) {
+async function getUserById({ userId }) {
   return await new Promise((resolve, reject) =>
     userSchema
       .findOne({ _id: userId })
-      .then(result => {
+      .then((result) => {
         if (result) {
           resolve({
             id: result._id,
@@ -147,7 +136,8 @@ async function getUserById ({ userId }) {
             message: 'there is no any user with this id'
           })
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         reject({
           statusCode: 500,
           message: err
@@ -156,24 +146,16 @@ async function getUserById ({ userId }) {
   )
 }
 
-async function resetUserPassword ({ userId, newPassword }) {
+async function resetUserPassword({ userId, newPassword }) {
   return await new Promise((resolve, reject) => {
     userSchema
-      .findOneAndUpdate(
-        { _id: userId },
-        { password: newPassword },
-        { new: true })
+      .findOneAndUpdate({ _id: userId }, { password: newPassword }, { new: true })
       .then((response) => {
         // check if there is user with this userId
         if (response) {
           // there is user send users this response
           // create token for created user
-          const token = generateJwt(
-            response.id,
-            response.userName,
-            response.email,
-            response.role
-          )
+          const token = generateJwt(response.id, response.userName, response.email, response.role)
 
           // return result as response
           resolve({
@@ -203,9 +185,8 @@ async function resetUserPassword ({ userId, newPassword }) {
   })
 }
 
-
 // generate JWT with data => {id , email , name , role}
-function generateJwt (id, email, userName, role) {
+function generateJwt(id, email, userName, role) {
   const expiry = new Date()
   expiry.setDate(expiry.getDate() + 7)
 
@@ -223,11 +204,9 @@ function generateJwt (id, email, userName, role) {
 }
 
 // create password with hash and salt
-function setPassword (password) {
+function setPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex')
-  const hash = crypto
-    .pbkdf2Sync(password, salt, 1000, 64, 'sha512')
-    .toString('hex')
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex')
 
   return {
     salt,
@@ -235,7 +214,10 @@ function setPassword (password) {
   }
 }
 
-
 module.exports = {
-  createNewUser, loginUser, findUserModel, resetUserPassword, getUserById
+  createNewUser,
+  loginUser,
+  findUserModel,
+  resetUserPassword,
+  getUserById
 }

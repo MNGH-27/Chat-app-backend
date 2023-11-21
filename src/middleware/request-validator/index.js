@@ -1,4 +1,3 @@
-
 //* middlewares/Validator.js
 const createHttpError = require('http-errors')
 
@@ -6,12 +5,11 @@ const createHttpError = require('http-errors')
 const Validators = require('./../../utils/validators')
 const { extractJoiErrorMessage } = require('./../../utils/helper')
 
-
-function requestValidatorMiddleWare (validator) {
+function requestValidatorMiddleWare(validator) {
   return async function (req, res, next) {
     try {
-      const validated = await Validators[validator].validateAsync(req.body)
-      req.body = validated
+      const validated = await Validators[validator].validateAsync(req.body, { abortEarly: false })
+      req.body = { ...validated }
       next()
     } catch (err) {
       //! If validation error occurs call next with HTTP 422. Otherwise HTTP 500
@@ -21,10 +19,9 @@ function requestValidatorMiddleWare (validator) {
         })
       }
 
-      next(createHttpError(500))
+      next(createHttpError(500, 'there is error in request validator middleware'))
     }
   }
 }
-
 
 module.exports = requestValidatorMiddleWare

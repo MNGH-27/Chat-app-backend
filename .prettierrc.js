@@ -18,8 +18,7 @@ module.exports = {
       options: {
         trailingComma: 'none',
         semi: false
-        spaceBeforeFunctionParen: false,
       }
     }
   ]
-};
+}

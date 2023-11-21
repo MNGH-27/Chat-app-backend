@@ -23,6 +23,7 @@ module.exports = {
   },
   rules: {
     'no-console': 'warn',
+    'space-before-function-paren': 'off',
     //* Avoid Bugs
     'no-undef': 'error',
     // semi: 'error',
