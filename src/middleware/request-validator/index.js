@@ -9,7 +9,8 @@ function requestValidatorMiddleWare(validator) {
   return async function (req, res, next) {
     try {
       const validated = await Validators[validator].validateAsync(req.body, { abortEarly: false })
-      req.body = { ...validated }
+
+      req.body = validated
       next()
     } catch (err) {
       //! If validation error occurs call next with HTTP 422. Otherwise HTTP 500

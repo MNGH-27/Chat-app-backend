@@ -14,7 +14,6 @@ const { tokenAuthenticationMiddleWare } = require('./src/middleware/')
 // creat app
 const app = express()
 
-
 // middle wares
 // logger(morgan) are using the host parameter
 app.use(logger('dev'))
@@ -26,7 +25,7 @@ app.use(cookieParser())
 app.use(mongoSanitize())
 
 // Serve static files from the 'uploads' directory
-app.use(express.static('uploads'))
+app.use('/files', express.static('src/uploads'))
 
 // CORS HADNLING
 app.use(
@@ -56,6 +55,5 @@ app.use(tokenAuthenticationMiddleWare)
 
 // ADD ROUTER =: API OF V1
 app.use('/v1', api)
-
 
 module.exports = app

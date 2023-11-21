@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-function tokenAuthenticationMiddleWare (req, res, next) {
+function tokenAuthenticationMiddleWare(req, res, next) {
   // Get the token from the request headers or cookies or wherever you store it
   const BearerToken = req.headers.authorization
 
@@ -16,12 +16,10 @@ function tokenAuthenticationMiddleWare (req, res, next) {
 
   const token = BearerToken.split('Bearer ')[1]
 
-
   // Check if the token exists in bearer token
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
-
 
   // Verify and decode the token
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
@@ -36,8 +34,6 @@ function tokenAuthenticationMiddleWare (req, res, next) {
   })
 }
 
-const unAuthenticatUrl = [
-  '/v1/auth/login', '/v1/auth/signup', '/v1/auth/forgetPassword', '/v1/auth/checkOtp', '/v1/auth/resetPassword'
-]
+const unAuthenticatUrl = ['/v1/auth/login', '/v1/auth/signup', '/v1/auth/forgetPassword', '/v1/auth/checkOtp', '/v1/auth/resetPassword']
 
 module.exports = tokenAuthenticationMiddleWare

@@ -1,11 +1,17 @@
-
 const multer = require('multer')
+const path = require('path')
 
 // Define the storage for uploaded files
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    // Specify the directory where uploaded files will be stored for each user
+    const userUploadsDir = path.join('./src/uploads', `${req.body.userName}`)
+
+    // Create the directory if it doesn't exist
+    require('fs').mkdirSync(userUploadsDir, { recursive: true })
+
     // Specify the directory where uploaded files will be stored
-    cb(null, './uploads')
+    cb(null, userUploadsDir)
   },
   filename: function (req, file, cb) {
     // Define how uploaded files will be named
@@ -17,9 +23,11 @@ const storage = multer.diskStorage({
 const uploadProfileMiddleWare = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-  // Check if the file is an image
+    // Check if the file is an image
     if (!file.mimetype.startsWith('image/')) {
-      return cb(new Error('Only image files are allowed.'))
+      const error = new Error('Only image files are allowed.')
+      error.status = 422
+      return cb(error)
     }
     // If it's an image, accept it
     cb(null, true)
@@ -27,4 +35,3 @@ const uploadProfileMiddleWare = multer({
 })
 
 module.exports = uploadProfileMiddleWare
-

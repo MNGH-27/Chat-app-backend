@@ -33,7 +33,7 @@ async function createNewUser({ userName, password, email, profile }) {
             id: response._id,
             userName: response.userName,
             email: response.email,
-            profile: generateFileLink(response.profile)
+            profile: generateFileLink(response.userName, response.profile)
           },
           token
         })
@@ -42,7 +42,7 @@ async function createNewUser({ userName, password, email, profile }) {
         // catch error code
         if (err.code === 11000) {
           reject({
-            statusCode: 400,
+            statusCode: 422,
             message: `field ${Object.keys(err.keyPattern)[0]} is duplicated`
           })
         }
