@@ -15,8 +15,8 @@ router.post('/signup', [uploadProfileMiddleWare.single('profile'), requestValida
 
 router.post('/forget-password', requestValidatorMiddleWare('forgetPasswordSchema'), authController.forgetPassword)
 
-router.post('/checkOtp', requestValidatorMiddleWare('checkOtpSchema'), authController.checkOPTCode)
+router.post('/check-otp', requestValidatorMiddleWare('checkOtpSchema'), authController.checkOPTCode)
 
-router.post('/resetPassword', requestValidatorMiddleWare('resetPasswordSchema'), authController.resetPassword)
+router.post('/reset-password', requestValidatorMiddleWare('resetPasswordSchema'), authController.resetPassword)
 
 module.exports = router
