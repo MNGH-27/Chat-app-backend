@@ -13,7 +13,7 @@ router.post('/login', requestValidatorMiddleWare('loginSchema'), authController.
 
 router.post('/signup', [uploadProfileMiddleWare.single('profile'), requestValidatorMiddleWare('signupSchema')], authController.signup)
 
-router.post('/forgetPassword', requestValidatorMiddleWare('forgetPasswordSchema'), authController.forgetPassword)
+router.post('/forget-password', requestValidatorMiddleWare('forgetPasswordSchema'), authController.forgetPassword)
 
 router.post('/checkOtp', requestValidatorMiddleWare('checkOtpSchema'), authController.checkOPTCode)
 

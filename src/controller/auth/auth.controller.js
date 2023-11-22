@@ -5,7 +5,7 @@ const { forgetPasswordTemplate } = require('./../../utils/template')
 
 // MODEL
 const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
-const { createForgetPassword, findForgetPassword } = require('./../../model/forgetPassword/forgetPassword.model')
+const { createForgetPassword, findForgetPassword, checkForgetPasswordExists } = require('./../../model/forgetPassword/forgetPassword.model')
 
 async function Login(req, res) {
   try {
@@ -50,6 +50,10 @@ async function forgetPassword(req, res) {
   try {
     // find user base on email user send
     const findUser = await findUserModel({ email: req.body.email })
+
+    // check if there is forget password in database
+    // if there was forgetpassword in user then this function would return reject
+    await checkForgetPasswordExists({ userId: findUser.id })
 
     // create new OTP base on user we fetch from data base
     const newOTP = await createForgetPassword({ userId: findUser.id })

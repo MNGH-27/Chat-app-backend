@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
-
+const { ROUTES_WHITE_LIST } = require('./../../utils/constants')
 function tokenAuthenticationMiddleWare(req, res, next) {
   // Get the token from the request headers or cookies or wherever you store it
   const BearerToken = req.headers.authorization
 
   // check if route is UnAuthenticate Route
-  if (unAuthenticatUrl.includes(req.url)) {
+  if (ROUTES_WHITE_LIST.includes(req.url)) {
     return next()
   }
 
@@ -33,7 +33,5 @@ function tokenAuthenticationMiddleWare(req, res, next) {
     next()
   })
 }
-
-const unAuthenticatUrl = ['/v1/auth/login', '/v1/auth/signup', '/v1/auth/forgetPassword', '/v1/auth/checkOtp', '/v1/auth/resetPassword']
 
 module.exports = tokenAuthenticationMiddleWare
