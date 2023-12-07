@@ -3,7 +3,7 @@ module.exports = {
   singleQuote: true,
   // trailingComma: '',
   arrowParens: 'always',
-  printWidth: 200,
+  printWidth: 100,
   tabWidth: 2,
   overrides: [
     {

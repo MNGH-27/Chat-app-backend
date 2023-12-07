@@ -4,8 +4,17 @@ const nodemailer = require('nodemailer')
 const { forgetPasswordTemplate } = require('./../../utils/template')
 
 // MODEL
-const { loginUser, createNewUser, findUserModel, resetUserPassword } = require('./../../model/user/user.model')
-const { createForgetPassword, findForgetPassword, checkForgetPasswordExists } = require('./../../model/forgetPassword/forgetPassword.model')
+const {
+  loginUser,
+  createNewUser,
+  findUserModel,
+  resetUserPassword
+} = require('./../../model/user/user.model')
+const {
+  createForgetPassword,
+  findForgetPassword,
+  checkForgetPasswordExists
+} = require('./../../model/forgetPassword/forgetPassword.model')
 
 async function Login(req, res) {
   try {
@@ -28,10 +37,12 @@ async function Login(req, res) {
 
 async function signup(req, res) {
   try {
+    console.log('req.file : ', req.file)
+
     // generate new user
     const newUser = await createNewUser({
       ...req.body,
-      profile: req.file.filename
+      profile: 'req.file.filename'
     })
 
     // user created successfuly => send users information for frontend
@@ -40,7 +51,9 @@ async function signup(req, res) {
     })
   } catch (error) {
     // send error
-    return res.status(error.statusCode).send({
+    console.log('this is error : ', error)
+
+    return res.status(error?.statusCode ?? 500).send({
       message: error.message
     })
   }
@@ -104,7 +117,10 @@ async function forgetPassword(req, res) {
 
 async function checkOPTCode(req, res) {
   try {
-    const otpCode = await findForgetPassword({ otpCode: req.body.otp, userId: req.body.userId })
+    const otpCode = await findForgetPassword({
+      otpCode: req.body.otp,
+      userId: req.body.userId
+    })
 
     // send finded otpCode for user as response code 201
     return res.status(201).send({
@@ -121,7 +137,10 @@ async function checkOPTCode(req, res) {
 
 async function resetPassword(req, res) {
   try {
-    const newUserPassword = await resetUserPassword({ newPassword: req.body.password, userId: req.body.userId })
+    const newUserPassword = await resetUserPassword({
+      newPassword: req.body.password,
+      userId: req.body.userId
+    })
 
     return res.status(201).send({
       message: 'your password changed successfully',
