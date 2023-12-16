@@ -1,6 +1,6 @@
 const { findUserModel } = require('../../model/user/user.model')
 
-async function findUser (req, res) {
+async function findUser(req, res) {
   // Get the 'userName' query parameter from the URL
   const userName = req.query.userName
 
@@ -24,7 +24,7 @@ async function findUser (req, res) {
   }
 }
 
-async function getCurrentUser (req, res) {
+async function getCurrentUser(req, res) {
   if (req.user) {
     return res.status(200).send({
       data: req.user
@@ -36,7 +36,7 @@ async function getCurrentUser (req, res) {
   })
 }
 
-
 module.exports = {
-  findUser, getCurrentUser
+  findUser,
+  getCurrentUser
 }

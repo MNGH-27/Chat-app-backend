@@ -11,7 +11,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 const api = require('./src/routes/api.routes')
 const { tokenAuthenticationMiddleWare } = require('./src/middleware/')
 
-// creat app
+// create app
 const app = express()
 
 // middle wares
@@ -27,7 +27,7 @@ app.use(mongoSanitize())
 // Serve static files from the 'uploads' directory
 app.use('/files', express.static('src/uploads'))
 
-// CORS HADNLING
+// CORS HANDLING
 app.use(
   cors({
     origin: 'http://localhost:3000',
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// [SH] Initialise Passport before using the route middleware
+// [SH] Initialize Passport before using the route middleware
 app.use(passport.initialize())
 
 // CUSTOM MIDDLE-WARE

@@ -23,7 +23,7 @@ async function Login(req, res) {
       ...req.body
     })
 
-    // user created successfuly => send users information for frontend
+    // user created successfully => send users information for frontend
     return res.status(201).send({
       ...loginData
     })
@@ -37,21 +37,18 @@ async function Login(req, res) {
 
 async function signup(req, res) {
   try {
-    console.log('req.file : ', req.file)
-
     // generate new user
     const newUser = await createNewUser({
       ...req.body,
-      profile: 'req.file.filename'
+      profile: req.file.filename
     })
 
-    // user created successfuly => send users information for frontend
+    // user created successfully => send users information for frontend
     return res.status(201).send({
       ...newUser
     })
   } catch (error) {
     // send error
-    console.log('this is error : ', error)
 
     return res.status(error?.statusCode ?? 500).send({
       message: error.message
@@ -65,7 +62,7 @@ async function forgetPassword(req, res) {
     const findUser = await findUserModel({ email: req.body.email })
 
     // check if there is forget password in database
-    // if there was forgetpassword in user then this function would return reject
+    // if there was forget password in user then this function would return reject
     await checkForgetPasswordExists({ userId: findUser.id })
 
     // create new OTP base on user we fetch from data base
@@ -122,7 +119,7 @@ async function checkOPTCode(req, res) {
       userId: req.body.userId
     })
 
-    // send finded otpCode for user as response code 201
+    // send found otpCode for user as response code 201
     return res.status(201).send({
       userId: otpCode.userId,
       message: 'otp code is correct reset your password'
