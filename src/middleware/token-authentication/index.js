@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
+
 const { ROUTES_WHITE_LIST } = require('./../../utils/constants')
+
 function tokenAuthenticationMiddleWare(req, res, next) {
   // Get the token from the request headers or cookies or wherever you store it
   const BearerToken = req.headers.authorization
