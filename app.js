@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const logger = require('morgan')
 const passport = require('passport')
+const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const mongoSanitize = require('express-mongo-sanitize')
 
@@ -47,8 +48,25 @@ app.use((req, res, next) => {
   next()
 })
 
-// [SH] Initialize Passport before using the route middleware
+// Import the secondary "Strategy" library
+// const LocalStrategy = require('passport-local').Strategy
+
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true
+  })
+)
+
+// init passport on every route call.
 app.use(passport.initialize())
+
+// allow passport to use "express-session".
+app.use(passport.session())
+
+// The "authUser" is a function that we will define later will contain the steps to authenticate a user, and will return the "authenticated user".
+// passport.use(new LocalStrategy(authUser))
 
 // CUSTOM MIDDLE-WARE
 app.use(tokenAuthenticationMiddleWare)
