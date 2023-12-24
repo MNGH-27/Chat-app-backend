@@ -1,39 +1,19 @@
-const jwt = require('jsonwebtoken')
+const passport = require('passport')
+const ROUTES_WHITE_LIST = require('../../utils/constants/routes-white-list')
 
-const { ROUTES_WHITE_LIST } = require('./../../utils/constants')
+// Middleware function to protect routes
+const protectRoute = passport.authenticate('jwt', { session: false })
 
-function tokenAuthenticationMiddleWare(req, res, next) {
-  // Get the token from the request headers or cookies or wherever you store it
-  const BearerToken = req.headers.authorization
-
-  // check if route is UnAuthenticate Route
+// Custom middleware to check if the route is in the whitelist
+const passportMiddleware = (req, res, next) => {
   if (ROUTES_WHITE_LIST.includes(req.url)) {
+    // Skip authentication for routes in the whitelist
     return next()
   }
-
-  // check if there is token in token field
-  if (!BearerToken) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
-  const token = BearerToken.split('Bearer ')[1]
-
-  // Check if the token exists in bearer token
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
-  // Verify and decode the token
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid token' })
-    }
-    // Attach the user data to the request object for future use
-    req.user = user
-
-    // Continue processing the request
-    next()
-  })
+  // Apply authentication for other routes
+  return protectRoute(req, res, next)
 }
 
-module.exports = tokenAuthenticationMiddleWare
+module.exports = {
+  passportMiddleware
+}

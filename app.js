@@ -9,7 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 
 // REQUIRE CUSTOM MIDDLEWARES
 const api = require('./src/routes/api.routes')
-const tokenAuthenticationMiddleWare = require('./src/middleware/token-authentication')
+const { passportMiddleware } = require('./src/middleware/token-authentication')
 
 // create app
 const app = express()
@@ -60,7 +60,12 @@ app.use((req, res, next) => {
  * * [SH] Initialize Passport before using the route middleware
  */
 app.use(passport.initialize())
-app.use(tokenAuthenticationMiddleWare)
+
+// password config
+require('./src/middleware/passport')
+
+// middleware of password for check certain routes
+app.use(passportMiddleware)
 
 /**
  * * ROUTER
