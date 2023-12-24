@@ -4,7 +4,8 @@ const express = require('express')
 const authController = require('./../../controller/auth/auth.controller')
 
 // MIDDLEWARE - handle profile upload
-const { uploadProfileMiddleWare, requestValidatorMiddleWare } = require('./../../middleware')
+const requestValidatorMiddleWare = require('./../../middleware/request-validator')
+const uploadProfileMiddleWare = require('./../../middleware/upload-profile')
 
 // ROUTER
 const router = express.Router()
