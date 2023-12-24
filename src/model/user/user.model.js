@@ -1,13 +1,12 @@
 // Packages
 const crypto = require('crypto')
-const jwt = require('jsonwebtoken')
 
 // use Database Schema
 const userSchema = require('./user.schema')
 
 // helper
-const { generateFileLink } = require('../../utils/helper')
-
+const generateFileLink = require('../../utils/helper/generate-file-link')
+const generateJwt = require('../../utils/helper/generate-jwt')
 async function createNewUser({ userName, password, email, profile }) {
   // create password for user =>
   const { hash, salt } = setPassword(password)
@@ -25,7 +24,12 @@ async function createNewUser({ userName, password, email, profile }) {
       })
       .then((response) => {
         // create token for created user
-        const token = generateJwt(response._id, response.userName, response.email, response.role)
+        const token = generateJwt({
+          id: response._id,
+          userName: response.userName,
+          email: response.email,
+          role: response.role
+        })
 
         // return result as response
         resolve({
@@ -62,7 +66,12 @@ async function loginUser({ userName, password }) {
       .then((result) => {
         if (result) {
           // create token for created user
-          const token = generateJwt(result._id, result.userName, result.email, result.role)
+          const token = generateJwt({
+            id: result._id,
+            userName: result.userName,
+            email: result.email,
+            role: result.role
+          })
 
           resolve({
             token,
@@ -155,7 +164,12 @@ async function resetUserPassword({ userId, newPassword }) {
         if (response) {
           // there is user send users this response
           // create token for created user
-          const token = generateJwt(response.id, response.userName, response.email, response.role)
+          const token = generateJwt({
+            id: response._id,
+            userName: response.userName,
+            email: response.email,
+            role: response.role
+          })
 
           // return result as response
           resolve({
@@ -183,24 +197,6 @@ async function resetUserPassword({ userId, newPassword }) {
         })
       })
   })
-}
-
-// generate JWT with data => {id , email , name , role}
-function generateJwt(id, email, userName, role) {
-  const expiry = new Date()
-  expiry.setDate(expiry.getDate() + 7)
-
-  return jwt.sign(
-    {
-      id: id,
-      email: email,
-      userName: userName,
-      role: role,
-      exp: parseInt(expiry.getTime() / 1000)
-    },
-    // JWT secret Key from .env file
-    process.env.JWT_SECRET
-  )
 }
 
 // create password with hash and salt

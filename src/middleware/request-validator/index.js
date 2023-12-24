@@ -3,7 +3,7 @@ const createHttpError = require('http-errors')
 
 //* Include all validators
 const Validators = require('./../../utils/validators')
-const { extractJoiErrorMessage } = require('./../../utils/helper')
+const extractJoiErrorMessage = require('./../../utils/helper/extract-joi-error-message')
 
 function requestValidatorMiddleWare(validator) {
   return async function (req, res, next) {
