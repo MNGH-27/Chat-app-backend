@@ -10,7 +10,7 @@ const requestValidatorMiddleWare = require('./../../middleware/request-validator
 const router = express.Router()
 
 router.post(
-  '/connectRoom',
+  '/connect-room',
   requestValidatorMiddleWare('connectRoomSchema'),
   roomController.connectRoom
 )

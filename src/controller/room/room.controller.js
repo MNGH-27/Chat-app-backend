@@ -2,18 +2,20 @@
 const { getUserById } = require('../../model/user/user.model')
 const { findRoom, createRoom, getRoomById } = require('./../../model/room/room.model')
 
-async function connectRoom (req, res) {
+async function connectRoom(req, res) {
   try {
     const existedRoom = await findRoom({ receiverId: req.body.receiverId, senderId: req.user.id })
 
     // check if there is room
     if (existedRoom) {
       // there is room and send rooms detail
-      return res.send({ data: { ...existedRoom }, message: 'connect to friend successfully' })
+      return res
+        .status(201)
+        .send({ data: { ...existedRoom }, message: 'connect to friend successfully' })
     }
 
     const newRoom = await createRoom({ receiverId: req.body.receiverId, senderId: req.user.id })
-    return res.send({ data: { ...newRoom }, message: 'connect to friend successfully' })
+    return res.status(201).send({ data: { ...newRoom }, message: 'connect to friend successfully' })
   } catch (error) {
     // there was error while login user
     return res.status(error.statusCode).send({
@@ -22,7 +24,7 @@ async function connectRoom (req, res) {
   }
 }
 
-async function getRoomDetail (req, res) {
+async function getRoomDetail(req, res) {
   // Get the 'roomId' query parameter from the URL
   const roomId = req.query.roomId
 
@@ -36,14 +38,10 @@ async function getRoomDetail (req, res) {
   try {
     const room = await getRoomById({ roomId })
 
-
-    const receiver = await getUserById(
-      {
-        // check user and set receiver base of user send this request
-        userId: room.receiverId !== req.user.id ? room.receiverId : room.senderId
-      }
-    )
-
+    const receiver = await getUserById({
+      // check user and set receiver base of user send this request
+      userId: room.receiverId !== req.user.id ? room.receiverId : room.senderId
+    })
 
     res.status(200).send({
       data: {
