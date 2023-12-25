@@ -2,12 +2,12 @@
 const { Server } = require('socket.io')
 
 // ENUMS
-const { SocketKeys } = require('./../utils/enums')
+const { SocketKeys } = require('./../utils/enums/socket-keys')
 
 // DB models
 const { createNewMessage } = require('./../model/message/message.model')
 
-function serverHandler (server) {
+function serverHandler(server) {
   const io = new Server(server, {
     cors: {
       origin: 'http://localhost:3000',
@@ -36,9 +36,7 @@ function serverHandler (server) {
       }
     })
 
-
-    socket.on('disconnect', () => {
-    })
+    socket.on('disconnect', () => {})
   })
 }
 

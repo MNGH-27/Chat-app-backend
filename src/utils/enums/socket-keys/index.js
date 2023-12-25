@@ -5,4 +5,4 @@ const SocketKeys = {
   CheckNewMessage: 'check-new-message'
 }
 
-module.exports = SocketKeys
+module.exports = { SocketKeys }
