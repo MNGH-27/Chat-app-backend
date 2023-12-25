@@ -14,5 +14,5 @@ router.post(
   requestValidatorMiddleWare('connectRoomSchema'),
   roomController.connectRoom
 )
-router.get('/room_detail', roomController.getRoomDetail)
+router.get('/room-detail', roomController.getRoomDetail)
 module.exports = router
