@@ -18,7 +18,7 @@ async function connectRoom(req, res) {
     return res.status(201).send({ data: { ...newRoom }, message: 'connect to friend successfully' })
   } catch (error) {
     // there was error while login user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }
@@ -52,7 +52,7 @@ async function getRoomDetail(req, res) {
     })
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }

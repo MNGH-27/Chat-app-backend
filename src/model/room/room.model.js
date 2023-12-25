@@ -1,14 +1,15 @@
 // use Database Schema
 const roomSchema = require('./room.schema')
 
-async function findRoom ({ senderId, receiverId }) {
+async function findRoom({ senderId, receiverId }) {
   return new Promise((resolve, reject) => {
-    roomSchema.findOne({
-      $or: [
-        { senderId: senderId, receiverId: receiverId },
-        { senderId: receiverId, receiverId: senderId }
-      ]
-    })
+    roomSchema
+      .findOne({
+        $or: [
+          { senderId: senderId, receiverId: receiverId },
+          { senderId: receiverId, receiverId: senderId }
+        ]
+      })
       .then((response) => {
         if (response === null) {
           // there is no room with this ids so return null to create one
@@ -33,7 +34,7 @@ async function findRoom ({ senderId, receiverId }) {
   })
 }
 
-async function createRoom ({ senderId, receiverId }) {
+async function createRoom({ senderId, receiverId }) {
   return await new Promise((resolve, reject) => {
     roomSchema
       .create({
@@ -59,7 +60,7 @@ async function createRoom ({ senderId, receiverId }) {
   })
 }
 
-async function getRoomById ({ roomId }) {
+async function getRoomById({ roomId }) {
   return await new Promise((resolve, reject) => {
     roomSchema
       .findOne({
@@ -91,7 +92,8 @@ async function getRoomById ({ roomId }) {
   })
 }
 
-
 module.exports = {
-  findRoom, createRoom, getRoomById
+  findRoom,
+  createRoom,
+  getRoomById
 }
