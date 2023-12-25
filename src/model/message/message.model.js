@@ -8,7 +8,8 @@ async function createNewMessage({ senderId, receiverId, roomId, context }) {
         context,
         receiverId,
         roomId,
-        senderId
+        senderId,
+        createdAt: new Date()
       })
       .then((response) => {
         // return result as response
@@ -38,20 +39,16 @@ async function getMessageListById({ roomId }) {
       })
       .then((response) => {
         if (response.length > 0) {
-          const modifiedData = response.map((item) => {
-            const { _id, context, receiverId, roomId, senderId } = item
-            return {
+          // return result as response
+          resolve({
+            messages: response.map(({ _id, context, receiverId, roomId, senderId, createdAt }) => ({
               id: _id,
               context,
               receiverId,
               roomId,
-              senderId
-            } // Renaming _id to id and get just wanted items
-          })
-
-          // return result as response
-          resolve({
-            messages: [...modifiedData]
+              senderId,
+              createdAt
+            })) // Renaming _id to id and get just wanted items
           })
         } else {
           resolve({

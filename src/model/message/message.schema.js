@@ -16,9 +16,12 @@ const messageSchema = new mongoose.Schema({
   receiverId: {
     type: String,
     require: true
+  },
+  createdAt: {
+    type: Date,
+    require: true
   }
 })
-
 
 const message = mongoose.model('message', messageSchema)
 
