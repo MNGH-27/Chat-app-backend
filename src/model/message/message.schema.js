@@ -6,20 +6,23 @@ const messageSchema = new mongoose.Schema({
     require: true
   },
   roomId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room',
     require: true
   },
   senderId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     require: true
   },
   receiverId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     require: true
   },
   createdAt: {
     type: Date,
-    require: true
+    default: Date.now
   }
 })
 

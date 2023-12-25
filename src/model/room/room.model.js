@@ -63,9 +63,7 @@ async function createRoom({ senderId, receiverId }) {
 async function getRoomById({ roomId }) {
   return await new Promise((resolve, reject) => {
     roomSchema
-      .findOne({
-        _id: roomId
-      })
+      .findById(roomId)
       .then((response) => {
         if (response) {
           // return result as response
@@ -92,8 +90,28 @@ async function getRoomById({ roomId }) {
   })
 }
 
+async function getUserRooms({ userId }) {
+  return await new Promise((resolve, reject) => {
+    roomSchema
+      .find({
+        $or: [{ receiverId: userId }, { senderId: userId }]
+      })
+      .then((response) => {
+        resolve(response)
+      })
+      .catch((err) => {
+        // catch error if there would be error
+        reject({
+          status: 500,
+          message: err
+        })
+      })
+  })
+}
+
 module.exports = {
   findRoom,
   createRoom,
-  getRoomById
+  getRoomById,
+  getUserRooms
 }

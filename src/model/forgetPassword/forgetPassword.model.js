@@ -15,7 +15,7 @@ const checkForgetPasswordExists = ({ userId }) => {
         if (response) {
           // there is response , we have created OTP for this email before
           reject({
-            statusCode: 400,
+            status: 400,
             message: 'we sent OTP code for your email'
           })
         } else {
@@ -24,7 +24,7 @@ const checkForgetPasswordExists = ({ userId }) => {
       })
       .catch((error) =>
         reject({
-          statusCode: 500,
+          status: 500,
           message: error
         })
       )
@@ -44,7 +44,7 @@ const createForgetPassword = async ({ userId }) => {
       })
       .catch((error) =>
         reject({
-          statusCode: 500,
+          status: 500,
           message: error
         })
       )
@@ -65,14 +65,14 @@ const findForgetPassword = async ({ userId, otpCode }) => {
         } else {
           // No otp code found with the given userId and otpCode
           reject({
-            statusCode: 400,
+            status: 400,
             message: 'The otp code you sent is not correct'
           })
         }
       })
       .catch((err) => {
         reject({
-          statusCode: 500,
+          status: 500,
           message: err
         })
       })

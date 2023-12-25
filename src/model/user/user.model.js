@@ -46,13 +46,13 @@ async function createNewUser({ userName, password, email, profile }) {
         // catch error code
         if (err.code === 11000) {
           reject({
-            statusCode: 422,
+            status: 422,
             message: `field ${Object.keys(err.keyPattern)[0]} is duplicated`
           })
         }
 
         reject({
-          statusCode: 500,
+          status: 500,
           message: err
         })
       })
@@ -84,7 +84,7 @@ async function loginUser({ userName, password }) {
           })
         } else {
           reject({
-            statusCode: 400,
+            status: 400,
             // eslint-disable-next-line quotes
             message: "can't find user with this data"
           })
@@ -92,7 +92,7 @@ async function loginUser({ userName, password }) {
       })
       .catch((err) => {
         reject({
-          statusCode: 500,
+          status: 500,
           message: err
         })
       })
@@ -113,14 +113,14 @@ async function findUserModel(searchField) {
           })
         } else {
           reject({
-            statusCode: 400,
+            status: 400,
             message: 'there is no any user with this email'
           })
         }
       })
       .catch((err) => {
         reject({
-          statusCode: 500,
+          status: 500,
           message: err
         })
       })
@@ -141,14 +141,14 @@ async function getUserById({ userId }) {
           })
         } else {
           reject({
-            statusCode: 400,
+            status: 400,
             message: 'there is no any user with this id'
           })
         }
       })
       .catch((err) => {
         reject({
-          statusCode: 500,
+          status: 500,
           message: err
         })
       })
@@ -184,15 +184,39 @@ async function resetUserPassword({ userId, newPassword }) {
         } else {
           // there wasn't any user with this data send error
           reject({
-            statusCode: 400,
+            status: 400,
             message: 'there is not user with this id'
           })
         }
       })
       .catch((err) => {
-        // error occure while get data from database
+        // error occur while get data from database
         reject({
-          statusCode: 500,
+          status: 500,
+          message: err
+        })
+      })
+  })
+}
+
+async function getUsersListWithIdList({ usersList }) {
+  return await new Promise((resolve, reject) => {
+    userSchema
+      .find({ _id: { $in: usersList } })
+      .then((response) => {
+        // return result as response
+        resolve([
+          ...response.map(({ _id, userName, profile }) => ({
+            id: _id,
+            userName,
+            profile: generateFileLink(profile)
+          }))
+        ])
+      })
+      .catch((err) => {
+        // error occur while get data from database
+        reject({
+          status: 500,
           message: err
         })
       })
@@ -215,5 +239,6 @@ module.exports = {
   loginUser,
   findUserModel,
   resetUserPassword,
-  getUserById
+  getUserById,
+  getUsersListWithIdList
 }

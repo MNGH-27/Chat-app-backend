@@ -15,4 +15,6 @@ router.post(
   roomController.connectRoom
 )
 router.get('/room-detail', roomController.getRoomDetail)
+router.get('/connected-users-list', roomController.getConnectedUsersList)
+
 module.exports = router

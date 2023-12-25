@@ -18,7 +18,7 @@ async function findUser(req, res) {
     return res.status(200).send(findUser)
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }

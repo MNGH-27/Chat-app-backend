@@ -2,15 +2,20 @@ const mongoose = require('mongoose')
 
 const roomSchema = new mongoose.Schema({
   senderId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     require: true
   },
   receiverId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     require: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 })
-
 
 const Room = mongoose.model('Room', roomSchema)
 

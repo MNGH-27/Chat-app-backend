@@ -1,6 +1,8 @@
 // MODEL
-const { getUserById } = require('../../model/user/user.model')
-const { findRoom, createRoom, getRoomById } = require('./../../model/room/room.model')
+const { getLastMessage, getRoomsListLastMessage } = require('../../model/message/message.model')
+const { listeners } = require('../../model/message/message.schema')
+const { getUserById, getUsersListWithIdList } = require('../../model/user/user.model')
+const { findRoom, createRoom, getRoomById, getUserRooms } = require('./../../model/room/room.model')
 
 async function connectRoom(req, res) {
   try {
@@ -58,7 +60,55 @@ async function getRoomDetail(req, res) {
   }
 }
 
+async function getConnectedUsersList(req, res) {
+  try {
+    const room = await getUserRooms({ userId: req.user.id })
+
+    let friendsList = []
+
+    // generate base object structure for room
+    room.forEach((singleRoom) => {
+      friendsList.push({
+        friendId:
+          singleRoom.receiverId !== req.user.id ? singleRoom.receiverId : singleRoom.senderId,
+        roomId: singleRoom._id
+      })
+    })
+
+    // get list of friend
+    const friendsDataList = await getUsersListWithIdList({
+      usersList: friendsList.map((item) => item.friendId)
+    })
+
+    // get list of last Messages
+    const lastMessagesDataList = await getRoomsListLastMessage({
+      roomIdList: friendsList.map((item) => item.roomId)
+    })
+
+    friendsList = friendsList.map((item) => {
+      return {
+        user: {
+          ...friendsDataList.find(({ id }) => item.friendId.toString() === id.toString())
+        },
+        message: {
+          ...lastMessagesDataList.find(({ roomId }) => item.roomId.toString() === roomId.toString())
+        }
+      }
+    })
+
+    res.status(200).send({
+      data: friendsList
+    })
+  } catch (error) {
+    // there is error while create new otp , send error to user
+    return res.status(error.status).send({
+      message: error.message
+    })
+  }
+}
+
 module.exports = {
   connectRoom,
-  getRoomDetail
+  getRoomDetail,
+  getConnectedUsersList
 }

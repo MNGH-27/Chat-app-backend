@@ -29,7 +29,7 @@ async function Login(req, res) {
     })
   } catch (error) {
     // there was error while login user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message.toString()
     })
   }
@@ -50,7 +50,7 @@ async function signup(req, res) {
   } catch (error) {
     // send error
 
-    return res.status(error?.statusCode ?? 500).send({
+    return res.status(error?.status ?? 500).send({
       message: error.message
     })
   }
@@ -106,7 +106,7 @@ async function forgetPassword(req, res) {
     })
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }
@@ -126,7 +126,7 @@ async function checkOPTCode(req, res) {
     })
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }
@@ -145,7 +145,7 @@ async function resetPassword(req, res) {
     })
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }
