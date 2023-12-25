@@ -1,7 +1,7 @@
 // use Database Schema
 const messageSchema = require('./message.schema')
 
-async function createNewMessage ({ senderId, receiverId, roomId, context }) {
+async function createNewMessage({ senderId, receiverId, roomId, context }) {
   return new Promise((resolve, reject) => {
     messageSchema
       .create({
@@ -30,7 +30,7 @@ async function createNewMessage ({ senderId, receiverId, roomId, context }) {
   })
 }
 
-async function getMessageListById ({ roomId }) {
+async function getMessageListById({ roomId }) {
   return new Promise((resolve, reject) => {
     messageSchema
       .find({
@@ -38,14 +38,8 @@ async function getMessageListById ({ roomId }) {
       })
       .then((response) => {
         if (response.length > 0) {
-          const modifiedData = response.map(item => {
-            const {
-              _id,
-              context,
-              receiverId,
-              roomId,
-              senderId
-            } = item
+          const modifiedData = response.map((item) => {
+            const { _id, context, receiverId, roomId, senderId } = item
             return {
               id: _id,
               context,
@@ -56,7 +50,9 @@ async function getMessageListById ({ roomId }) {
           })
 
           // return result as response
-          resolve(modifiedData)
+          resolve({
+            messages: [...modifiedData]
+          })
         } else {
           resolve({
             messages: []
@@ -74,5 +70,6 @@ async function getMessageListById ({ roomId }) {
 }
 
 module.exports = {
-  createNewMessage, getMessageListById
+  createNewMessage,
+  getMessageListById
 }

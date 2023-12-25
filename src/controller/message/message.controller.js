@@ -1,7 +1,7 @@
 // MODEL
 const { getMessageListById } = require('./../../model/message/message.model')
 
-async function getMessageList (req, res) {
+async function getMessageList(req, res) {
   // Get the 'roomId' query parameter from the URL
   const roomId = req.query.roomId
 
@@ -13,14 +13,14 @@ async function getMessageList (req, res) {
   }
 
   try {
-    const messageList = await getMessageListById({ roomId })
+    const messageResponse = await getMessageListById({ roomId })
 
     res.status(200).send({
-      data: [...messageList]
+      data: messageResponse
     })
   } catch (error) {
     // there is error while create new otp , send error to user
-    return res.status(error.statusCode).send({
+    return res.status(error.status).send({
       message: error.message
     })
   }
