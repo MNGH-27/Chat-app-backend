@@ -37,7 +37,7 @@ async function createNewUser({ userName, password, email, profile }) {
             id: response._id,
             userName: response.userName,
             email: response.email,
-            profile: generateFileLink(response.userName, response.profile)
+            profile: generateFileLink(response.profile)
           },
           token
         })

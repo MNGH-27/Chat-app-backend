@@ -40,7 +40,7 @@ async function signup(req, res) {
     // generate new user
     const newUser = await createNewUser({
       ...req.body,
-      profile: req.file.filename
+      profile: `${req.body.userName}/${req.file.filename}`
     })
 
     // user created successfully => send users information for frontend

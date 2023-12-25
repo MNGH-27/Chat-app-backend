@@ -1,5 +1,5 @@
 const multer = require('multer')
-const { multerStorageConfig } = require('./../../config/multer')
+const multerStorageConfig = require('./../../config/multer')
 const createHttpError = require('http-errors')
 
 // Create a multer instance with the storage configuration
