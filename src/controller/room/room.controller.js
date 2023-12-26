@@ -1,6 +1,5 @@
 // MODEL
-const { getLastMessage, getRoomsListLastMessage } = require('../../model/message/message.model')
-const { listeners } = require('../../model/message/message.schema')
+const { getRoomsListLastMessage } = require('../../model/message/message.model')
 const { getUserById, getUsersListWithIdList } = require('../../model/user/user.model')
 const { findRoom, createRoom, getRoomById, getUserRooms } = require('./../../model/room/room.model')
 
@@ -68,9 +67,9 @@ async function getConnectedUsersList(req, res) {
 
     // generate base object structure for room
     room.forEach((singleRoom) => {
+      const receiverIdString = singleRoom.receiverId.toString()
       friendsList.push({
-        friendId:
-          singleRoom.receiverId !== req.user.id ? singleRoom.receiverId : singleRoom.senderId,
+        friendId: receiverIdString !== req.user.id ? receiverIdString : singleRoom.senderId,
         roomId: singleRoom._id
       })
     })

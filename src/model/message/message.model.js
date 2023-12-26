@@ -70,7 +70,12 @@ async function getRoomsListLastMessage({ roomIdList }) {
       .then((response) => {
         resolve(
           getRoomsLatestMessages(
-            response.map(({ context, createdAt, roomId }) => ({ context, createdAt, roomId }))
+            response.map(({ context, createdAt, roomId, senderId }) => ({
+              context,
+              createdAt,
+              roomId,
+              senderId
+            }))
           )
         )
       })
