@@ -106,8 +106,45 @@ async function getConnectedUsersList(req, res) {
   }
 }
 
+async function getRoomLastMessage(req, res) {
+  // Get the 'roomId' params parameter from the URL
+  const roomId = req.params.roomId
+
+  // check if there is roomId in this params
+  if (!roomId) {
+    return res.status(400).send({
+      message: 'you have to send room id to check'
+    })
+  }
+  try {
+    // get list of last Messages
+    const lastMessagesDataList = await getRoomsListLastMessage({
+      roomIdList: [roomId]
+    })
+
+    // check if there is any message
+    if (lastMessagesDataList.length === 0) {
+      // there is no message in this room => send empty array
+      return res.status(200).send({
+        data: []
+      })
+    }
+
+    // send latest message which is in the first item of "lastMessagesDataList" array
+    return res.status(200).send({
+      data: lastMessagesDataList[0]
+    })
+  } catch (error) {
+    // there is error while create new otp , send error to user
+    return res.status(error.status).send({
+      message: error.message
+    })
+  }
+}
+
 module.exports = {
   connectRoom,
   getRoomDetail,
-  getConnectedUsersList
+  getConnectedUsersList,
+  getRoomLastMessage
 }
