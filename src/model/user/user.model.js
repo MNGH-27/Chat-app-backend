@@ -137,7 +137,9 @@ async function getUserById({ userId }) {
             id: result._id,
             userName: result.userName,
             email: result.email,
-            profile: generateFileLink(result.profile)
+            profile: generateFileLink(result.profile),
+            isOnline: result.isOnline,
+            lastSeen: result.lastSeen
           })
         } else {
           reject({
@@ -206,12 +208,48 @@ async function getUsersListWithIdList({ usersList }) {
       .then((response) => {
         // return result as response
         resolve([
-          ...response.map(({ _id, userName, profile }) => ({
+          ...response.map(({ _id, userName, profile, isOnline, lastSeen }) => ({
             id: _id,
             userName,
-            profile: generateFileLink(profile)
+            profile: generateFileLink(profile),
+            isOnline,
+            lastSeen
           }))
         ])
+      })
+      .catch((err) => {
+        // error occur while get data from database
+        reject({
+          status: 500,
+          message: err
+        })
+      })
+  })
+}
+
+async function setUserOnline({ userId }) {
+  return await new Promise((resolve, reject) => {
+    userSchema
+      .findByIdAndUpdate(userId, { isOnline: true })
+      .then(({ userName, email, profile }) => {
+        resolve({ userName, email, profile })
+      })
+      .catch((err) => {
+        // error occur while get data from database
+        reject({
+          status: 500,
+          message: err
+        })
+      })
+  })
+}
+
+async function setUserOffline({ userId }) {
+  return await new Promise((resolve, reject) => {
+    userSchema
+      .findByIdAndUpdate(userId, { isOnline: false, lastSeen: new Date() })
+      .then(({ userName, email, profile }) => {
+        resolve({ userName, email, profile })
       })
       .catch((err) => {
         // error occur while get data from database
@@ -240,5 +278,7 @@ module.exports = {
   findUserModel,
   resetUserPassword,
   getUserById,
-  getUsersListWithIdList
+  getUsersListWithIdList,
+  setUserOnline,
+  setUserOffline
 }

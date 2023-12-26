@@ -41,7 +41,7 @@ async function getRoomDetail(req, res) {
 
     const receiver = await getUserById({
       // check user and set receiver base of user send this request
-      userId: room.receiverId !== req.user.id ? room.receiverId : room.senderId
+      userId: room.receiverId.toString() !== req.user.id ? room.receiverId : room.senderId
     })
 
     res.status(200).send({

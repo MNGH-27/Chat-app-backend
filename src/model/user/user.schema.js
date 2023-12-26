@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-  // this will containe profile's name
+  // this will container profile's name
   profile: {
     type: String,
     required: true
@@ -25,6 +25,14 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: 'user'
+  },
+
+  isOnline: {
+    type: Boolean
+  },
+
+  lastSeen: {
+    type: Date
   },
 
   /**
